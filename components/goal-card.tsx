@@ -5,20 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox'; // Need to install checkbox? Or use simple input
-import { Plus, Trash2 } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Plus } from 'lucide-react';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
-
-// Simple checkbox since I didn't install shadcn checkbox yet
-const SimpleCheckbox = ({ checked, onChange }: { checked: boolean; onChange: () => void }) => (
-    <input
-        type="checkbox"
-        checked={checked}
-        onChange={onChange}
-        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-    />
-);
 
 export function GoalCard({ goal, onUpdate }: { goal: any; onUpdate: () => void }) {
     const [newTask, setNewTask] = useState('');
@@ -59,10 +49,17 @@ export function GoalCard({ goal, onUpdate }: { goal: any; onUpdate: () => void }
                 <div className="space-y-2">
                     {goal.tasks.map((task: any) => (
                         <div key={task.id} className="flex items-center space-x-2">
-                            <SimpleCheckbox checked={task.completed} onChange={() => toggleTask(task.id, task.completed)} />
-                            <span className={`text-sm ${task.completed ? 'line-through text-muted-foreground' : ''}`}>
+                            <Checkbox
+                                id={`task-${task.id}`}
+                                checked={task.completed}
+                                onCheckedChange={(checked) => toggleTask(task.id, checked as boolean)}
+                            />
+                            <label
+                                htmlFor={`task-${task.id}`}
+                                className={`text-sm ${task.completed ? 'line-through text-muted-foreground' : ''} cursor-pointer`}
+                            >
                                 {task.title}
-                            </span>
+                            </label>
                         </div>
                     ))}
                 </div>
